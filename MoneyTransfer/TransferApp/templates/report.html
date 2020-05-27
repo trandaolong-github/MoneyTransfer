@@ -1,0 +1,44 @@
+{% extends 'base_sidebar.html' %}
+{% load bootstrap4 %}
+
+{% block page %}
+<div class="col-lg-offset-2 col-lg-20">
+    <div class="panel">
+        <div class="panel-heading bg-blue">
+            <h4 class="panel-title text-center text-white">
+                Account report
+            </h4>
+        </div>
+        <br/>
+        <h5>Balance: {{ request.user.customer.balance }}</h5>
+    </div>
+    <br/>
+    <div class="panel-body">
+        <div class="text-left">
+            <h5>Transaction History:</h5>
+        </div>
+        <table class="table table-bordered table-hover table-striped">
+            <thead>
+                <tr class="bg-gray text-black">
+                    <th>Id</th>
+                    <th>Sender</th>
+                    <th>Receiver</th>
+                    <th>Reason</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for transaction in transactions %}
+                    <tr>
+                        <td scope="row">{{ transaction.id }}</td>
+                        <td>{{ transaction.sender.user.get_full_name }}</td>
+                        <td>{{ transaction.receiver.user.get_full_name }}</td>
+                        <td>{{ transaction.reason }}</td>
+                        <td>{{ transaction.amount }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

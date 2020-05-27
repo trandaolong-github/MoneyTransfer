@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %} Customer {% endblock %}
+
+{% block sidebar %}
+
+    {% url 'create-transaction' as create_transaction_url %}
+    {% url 'account-report' as account_report_url %}
+
+   <div class="text-center">
+       <h4>Hi {{ request.user.get_full_name }}</h4>
+   </div>
+
+   <div class="list-group">
+       <span class="text-uppercase">Dashboard</span>
+
+       <a href="{% url 'create-transaction' %}" class="list-group-item {% if request.path == create_transaction_url %} active {% endif %}">Create Transaction</a>
+       <a href="{% url 'account-report' %}" class="list-group-item {% if request.path == account_report_url %} active {% endif %}">Report</a>
+
+   </div>
+
+   <div class="text-center">
+       <a href="{% url 'sign-out' %}?next={{ request.path }}" class="btn btn-pink">Logout</a>
+   </div>
+{% endblock %}
