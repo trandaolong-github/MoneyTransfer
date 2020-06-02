@@ -21,6 +21,7 @@
             <thead>
                 <tr class="bg-gray text-black">
                     <th>Id</th>
+                    <th>Date</th>
                     <th>Sender</th>
                     <th>Receiver</th>
                     <th>Reason</th>
@@ -31,6 +32,7 @@
                 {% for transaction in transactions %}
                     <tr>
                         <td scope="row">{{ transaction.id }}</td>
+                        <td>{{ transaction.date }}</td>
                         <td>{{ transaction.sender.user.get_full_name }}</td>
                         <td>{{ transaction.receiver.user.get_full_name }}</td>
                         <td>{{ transaction.reason }}</td>

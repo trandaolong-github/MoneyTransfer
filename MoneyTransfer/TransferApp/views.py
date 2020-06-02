@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from TransferApp.models import Customer, Transaction
 from TransferApp.forms import UserForm, CustomerForm, TransactionForm
@@ -17,8 +18,14 @@ def create_transaction(request):
         if form.is_valid():
             sender = request.user.customer
             transaction = form.save(commit=False)
-            transaction.sender = sender
+            if transaction.amount > sender.balance:
+                messages.error(request,'Not enough money to send')
+                return redirect(create_transaction)
             receiver = transaction.receiver
+            if receiver == sender:
+                messages.error(request,'You can not send money to yourself')
+                return redirect(create_transaction)
+            transaction.sender = sender
             receiver.balance += transaction.amount
             receiver.save()
             transaction.save()
@@ -36,7 +43,7 @@ def transfer_home(request):
 
 @login_required(login_url='/sign-in/')
 def account_report(request):
-    transactions = Transaction.objects.filter(Q(sender=request.user.customer) | Q(receiver=request.user.customer))
+    transactions = Transaction.objects.filter(Q(sender=request.user.customer) | Q(receiver=request.user.customer)).order_by("-id")
     return render(request, 'report.html', {"transactions": transactions})
 
 def customer_sign_up(request):
